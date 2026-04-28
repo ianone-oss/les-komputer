@@ -22,7 +22,10 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+  //import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
+
 
   // GANTI DENGAN KONFIGURASI FIREBASE KAMU SENDIRI
   const firebaseConfig = {
@@ -34,10 +37,12 @@
       appId: "1:330141524286:web:bfd63af42bfd13657f8c6f",
       measurementId: "G-ZDC86ZBL4W"
   };
-
+    
+// Inisialisasi Database
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
+  //const auth = getAuth(app);
+    const database = getDatabase(app);
+    
   document.getElementById('btnLogin').addEventListener('click', () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
