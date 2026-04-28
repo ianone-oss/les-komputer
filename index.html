@@ -55,8 +55,10 @@
                 const role = docSnap.data().role;
                 if (role === "admin") {
                     alert("Halo Pak Guru Alfatoni!");
+                    window.location.href = "admin-dashboard.html";
                 } else {
                     alert("Halo Murid Habib!");
+                    window.location.href = "murid-dashboard.html";
                 }
             } else {
                 alert("Data role tidak ditemukan di Firestore untuk: " + userEmail);
