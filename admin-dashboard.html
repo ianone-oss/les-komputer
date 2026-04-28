@@ -3,43 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Les Komputer</title>
+    <title>Dashboard Guru - Les Komputer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f9; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 12px; shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; }
-        label { display: block; margin: 10px 0 5px; font-weight: bold; }
-        input, select { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
-        button:hover { background: #218838; }
-        .nav { text-align: right; margin-bottom: 20px; }
-        .nav a { color: #dc3545; text-decoration: none; font-size: 14px; }
+        :root {
+            --primary: #007bff;
+            --bg-input: rgba(238, 238, 238, 0.5);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Background gambar buku (sama dengan Login) */
+            background: url('') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Container Utama (Glassmorphism + Neumorphism) */
+        .glass-container {
+            background: rgba(255, 255, 255, 0.25); /* Efek Kaca Transparan */
+            backdrop-filter: blur(10px); /* Efek Blur belakang kaca */
+            -webkit-backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.1), 
+                        -20px -20px 60px rgba(255, 255, 255, 0.3); /* Bayangan lembut */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-sizing: border-box;
+        }
+
+        /* Header Teks sesuai referensi */
+        h1 {
+            color: #444;
+            font-size: 26px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+            padding-left: 5px;
+        }
+
+        /* Input & Select Neumorphism sesuai referensi */
+        input, select {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: none;
+            outline: none;
+            background: var(--bg-input);
+            border-radius: 15px;
+            /* Bayangan ke dalam (Cekungan Neumorphism) */
+            box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.05), 
+                        inset -5px -5px 10px rgba(255, 255, 255, 0.5);
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: #333;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), 
+                        inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Navigasi (Tombol Keluar) di Referensi */
+        .nav {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .btn-logout {
+            text-decoration: none;
+            color: #555;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s;
+            padding: 5px 10px;
+        }
+        
+        .btn-logout:hover {
+            color: #dc3545;
+        }
+
+        /* Tombol Utama Neumorphism sesuai referensi */
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            margin-top: 10px;
+            /* Bayangan menonjol Neumorphism */
+            box-shadow: 5px 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-submit:hover {
+            background: #0069d9;
+        }
+
+        .btn-submit:active {
+            box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(0.98);
+        }
+
+        /* Reset tampilan select agar gaya Neumorphism konsisten */
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23777" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+
     </style>
 </head>
 <body>
 
-<div class="nav"><a href="index.html">Keluar (Logout)</a></div>
+<div class="glass-container">
+    <div class="nav">
+        <a href="index.html" class="btn-logout">Keluar (Logout)</a>
+    </div>
 
-<div class="container">
     <h1>Input Nilai Murid</h1>
+    
     <form id="formNilai">
-        <label>Email Murid (Sesuai yang terdaftar):</label>
+        <label for="muridEmail">Email Murid (Sesuai Auth):</label>
         <input type="email" id="muridEmail" placeholder="contoh: budi@student.com" required>
         
-        <label>Nama Lengkap Murid:</label>
+        <label for="muridNama">Nama Lengkap Murid:</label>
         <input type="text" id="muridNama" placeholder="Nama Lengkap" required>
 
-        <label>Mata Pelajaran:</label>
+        <label for="mapel">Mata Pelajaran:</label>
         <select id="mapel">
             <option value="Microsoft Office">Microsoft Office</option>
             <option value="Desain Grafis">Desain Grafis</option>
             <option value="Dasar Coding">Dasar Coding</option>
         </select>
 
-        <label>Nilai Akhir:</label>
-        <input type="number" id="nilai" placeholder="0-100" required>
+        <label for="nilai">Nilai Akhir (0-100):</label>
+        <input type="number" id="nilai" placeholder="0-100" min="0" max="100" required>
 
-        <button type="submit">Simpan Data & Terbitkan Sertifikat</button>
+        <input type="hidden" id="sertifikatLink" value="sertifikat/default.jpg">
+
+        <button type="submit" class="btn-submit">Simpan & Terbitkan</button>
     </form>
 </div>
 
@@ -47,6 +180,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
+    // Gunakan Config Firebase kamu yang lama
     const firebaseConfig = {
         apiKey: "AIzaSyDkXnzg_RXtGd8HK7aOhMp0zOJiTf0miGU",
         authDomain: "les-komputer-8531d.firebaseapp.com",
@@ -66,6 +200,8 @@
         const nama = document.getElementById('muridNama').value;
         const mapel = document.getElementById('mapel').value;
         const nilai = document.getElementById('nilai').value;
+        // Bagian sertifikat sementara kita set default dulu sesuai rencana
+        const linkSertifikat = document.getElementById('sertifikatLink').value;
 
         try {
             // Menyimpan data ke koleksi 'nilai_murid'
@@ -73,12 +209,13 @@
                 nama: nama,
                 mata_pelajaran: mapel,
                 nilai: nilai,
+                sertifikat: linkSertifikat, // Field ini sudah siap
                 tanggal_input: new Date().toISOString()
             });
             alert("Data berhasil disimpan! Murid sekarang bisa cek nilainya.");
             document.getElementById('formNilai').reset();
         } catch (error) {
-            alert("Gagal menyimpan data: " + error.message);
+            alert("Gagal menyimpan data (Cek Firestore Rules): " + error.message);
         }
     });
 </script>
