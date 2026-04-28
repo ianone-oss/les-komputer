@@ -1,48 +1,83 @@
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Les Komputer Ian</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #eef2f7; margin: 0; }
+        .login-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 350px; text-align: center; }
+        h2 { color: #333; margin-bottom: 20px; }
+        input { display: block; width: 100%; margin-bottom: 15px; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background 0.3s; }
+        button:hover { background: #0056b3; }
+        .footer { margin-top: 15px; font-size: 12px; color: #777; }
+    </style>
+</head>
+<body>
 
+<div class="login-card">
+    <h2>Les Komputer</h2>
+    <p>Silakan login untuk akses nilai & sertifikat</p>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="btnLogin">Masuk</button>
+    <div class="footer">Sistem Informasi Les v1.0</div>
+</div>
+
+<script type="module">
+  // Import library yang dibutuhkan
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
+  // Konfigurasi dari gambar kamu tadi
   const firebaseConfig = {
     apiKey: "AIzaSyDkXnzg_RXtGd8HK7aOhMp0zOJiTf0miGU",
     authDomain: "les-komputer-8531d.firebaseapp.com",
     projectId: "les-komputer-8531d",
     storageBucket: "les-komputer-8531d.firebasestorage.app",
     messagingSenderId: "330141524286",
+    databaseURL: "https://les-komputer-8531d-default-rtdb.asia-southeast1.firebasedatabase.app", // Alamat database Singapore kamu
     appId: "1:330141524286:web:bfd63af42bfd13657f8c6f"
   };
 
+  // Inisialisasi
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app);
+  const db = getDatabase(app);
 
   document.getElementById('btnLogin').addEventListener('click', () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const userEmail = userCredential.user.email;
-        
-        // Ambil data role dari Firestore
-        const docRef = doc(db, "users", userEmail);
-        const docSnap = await getDoc(docRef);
+    if(!email || !password) return alert("Isi email dan password dulu ya!");
 
-        if (docSnap.exists()) {
-          const role = docSnap.data().role;
-          if (role === "admin") {
-            alert("Halo Pak Guru! Masuk ke Dashboard Admin...");
-            // window.location.href = "admin-dashboard.html";
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        
+        // Logika SI: Cek role di Realtime Database
+        // Kita gunakan versi simpel: cari di folder users berdasarkan ID unik
+        const userRef = ref(db, 'users/ian_admin'); // Sesuai nama yang kamu buat di database tadi
+        
+        get(userRef).then((snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            if(data.role === "admin") {
+                alert("Selamat datang Pak Admin Ian!");
+                // window.location.href = "admin-dashboard.html"; // Ini langkah kita selanjutnya
+            } else {
+                alert("Login berhasil sebagai Murid");
+                // window.location.href = "murid-dashboard.html";
+            }
           } else {
-            alert("Halo Murid! Masuk ke Halaman Nilai...");
-            // window.location.href = "murid-dashboard.html";
+            alert("Data role tidak ditemukan di database.");
           }
-        } else {
-          alert("Email terdaftar tapi role belum diatur di Firestore.");
-        }
+        });
       })
       .catch((error) => {
-        alert("Gagal: " + error.message);
+        alert("Gagal masuk: " + error.message);
       });
   });
 </script>
