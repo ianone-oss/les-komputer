@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Murid - Les Komputer</title>
+    <style>
+        body { font-family: sans-serif; background-color: #e9ecef; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        .nilai-circle { width: 100px; height: 100px; line-height: 100px; border-radius: 50%; background: #007bff; color: white; font-size: 32px; font-weight: bold; margin: 20px auto; }
+        h2 { margin: 10px 0; color: #333; }
+        p { color: #666; margin: 5px 0; }
+        .logout { display: inline-block; margin-top: 20px; color: #dc3545; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="card" id="kontenMurid">
+    <h2>Memuat Data...</h2>
+    <p>Sabar ya, sedang mengambil nilai kamu.</p>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDkXnzg_RXtGd8HK7aOhMp0zOJiTf0miGU",
+        authDomain: "les-komputer-8531d.firebaseapp.com",
+        projectId: "les-komputer-8531d",
+        storageBucket: "les-komputer-8531d.firebasestorage.app",
+        messagingSenderId: "330141524286",
+        appId: "1:330141524286:web:bfd63af42bfd13657f8c6f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Cek siapa yang sedang login
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const emailMurid = user.email;
+            const docRef = doc(db, "nilai_murid", emailMurid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById('kontenMurid').innerHTML = `
+                    <p>Selamat Datang,</p>
+                    <h2>${data.nama}</h2>
+                    <p>Mata Pelajaran: <b>${data.mata_pelajaran}</b></p>
+                    <div class="nilai-circle">${data.nilai}</div>
+                    <p>Status: <b>LULUS</b></p>
+                    <a href="index.html" class="logout">Keluar</a>
+                `;
+            } else {
+                document.getElementById('kontenMurid').innerHTML = `
+                    <h2>Data Belum Ada</h2>
+                    <p>Pak Guru belum menginput nilai untuk email: <br><b>${emailMurid}</b></p>
+                    <a href="index.html" class="logout">Kembali</a>
+                `;
+            }
+        } else {
+            window.location.href = "index.html";
+        }
+    });
+</script>
+
+</body>
+</html>
